@@ -26,12 +26,11 @@ public class NestedViewPager extends ViewPager {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent e) {
         getLocationInWindow(mLocationInWindow);
-        int actionIndex = e.getActionIndex();
         switch (e.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
-                mTargetPointerId = e.getPointerId(actionIndex);
-                mLastTouchX = e.getX(actionIndex) + mLocationInWindow[0];
-                mLastTouchY = e.getY(actionIndex) + mLocationInWindow[1];
+                mTargetPointerId = e.getPointerId(0);
+                mLastTouchX = e.getX(0) + mLocationInWindow[0];
+                mLastTouchY = e.getY(0) + mLocationInWindow[1];
                 break;
             case MotionEvent.ACTION_MOVE:
                 int index = e.findPointerIndex(mTargetPointerId);
@@ -46,7 +45,8 @@ public class NestedViewPager extends ViewPager {
                 }
                 break;
             case MotionEvent.ACTION_POINTER_UP:
-                if (e.getPointerId(e.getActionIndex()) == mTargetPointerId) {
+                int actionIndex = e.getActionIndex();
+                if (e.getPointerId(actionIndex) == mTargetPointerId) {
                     final int newPointerIndex = actionIndex == 0 ? 1 : 0;
                     mTargetPointerId = e.getPointerId(newPointerIndex);
                     mLastTouchX = e.getX(newPointerIndex) + mLocationInWindow[0];
